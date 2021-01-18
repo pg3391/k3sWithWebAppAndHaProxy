@@ -4,7 +4,7 @@ Prerequisite:
 Before you start following below steps create a sshkey pair for your local server where you're going to run this whole terraform code. Run "ssh-keygen -f sshkey" and keep entering.
 
 Steps to be followed:
-1. Clone repo "git clone https://sample_terraformapp.git"
+1. Clone this repo.
 2. Create a variable fine terraform.ftvars including AWS_ACCESS_KEY and AWS_SECRET_KEY of IAM user that you will be creating in AWS console. 
 3. Then run `terraform init`
 It will initialize the terraform based on the terraform source code.
