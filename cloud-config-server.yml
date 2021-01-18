@@ -1,0 +1,5 @@
+#cloud-config
+runcmd:
+- curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
+final_message: "The system is finally up, after $UPTIME seconds"
+#

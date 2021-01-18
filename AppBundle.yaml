@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   labels:
+     run: app
+   name: app
+     
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: app
+  template:
+    metadata:
+       labels:
+         run: app
+    spec:
+      containers:
+      - image: jmalloc/echo-server
+        name: app
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+     run: app
+  name: app
+  annotations: 
+    haproxy.org/check: "enabled"
+    haproxy.org/forwarded-for: "enabled"
+    haproxy.org/load-balance: "roundrobin"
+spec:
+  selector:
+    run: app
+  ports:
+  - protocol: TCP
+    port: 80
+    name: port-1
+    targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: web-ingress
+  namespace: default
+spec:
+  rules:
+  - host: foo.bar
+    http: 
+      paths: 
+      - path: /
+        backend:
+          serviceName: app
+          servicePort: 80
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: haproxy-configmap
+  namespace: default
+data:
+  servers-increment: "42"
+  ssl-redirect: "OFF"
